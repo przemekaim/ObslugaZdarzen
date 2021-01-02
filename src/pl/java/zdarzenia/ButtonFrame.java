@@ -30,14 +30,21 @@ public class ButtonFrame extends JFrame {
         add(buttonPanel);
 
         //Utworzenie akcji przyciskow
-        ColorAction yellowAction = new ColorAction(Color.YELLOW);
-        ColorAction blueAction = new ColorAction(Color.BLUE);
-        ColorAction redAction = new ColorAction(Color.RED);
+        //ColorAction yellowAction = new ColorAction(Color.YELLOW);
+        //ColorAction blueAction = new ColorAction(Color.BLUE);
+        // ColorAction redAction = new ColorAction(Color.RED);
 
         //Powiazanie akcji z przyciskami
-        yellowButton.addActionListener(yellowAction);
-        blueButton.addActionListener(blueAction);
-        redButton.addActionListener(redAction);
+
+        //yellowButton.addActionListener(yellowAction);
+        //blueButton.addActionListener(blueAction);
+        //redButton.addActionListener(redAction);
+
+        // To samo tylko z lambda
+        yellowButton.addActionListener(event -> buttonPanel.setBackground(Color.YELLOW));
+        blueButton.addActionListener(event -> buttonPanel.setBackground(Color.BLUE));
+        redButton.addActionListener(event -> buttonPanel.setBackground(Color.RED));
+        // W wyniku tego klasa wenwetrzna ColorAction nie jest potrzebna
     }
 
 
