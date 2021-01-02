@@ -17,6 +17,7 @@ public class ButtonFrame extends JFrame {
         JButton yellowButton = new JButton("Zolty");
         JButton blueButton = new JButton("Niebieski");
         JButton redButton = new JButton("Czerwony");
+        JButton exitButton = new JButton("Wyjscie");
 
         buttonPanel = new JPanel();
 
@@ -25,6 +26,7 @@ public class ButtonFrame extends JFrame {
         buttonPanel.add(yellowButton);
         buttonPanel.add(blueButton);
         buttonPanel.add(redButton);
+        buttonPanel.add(exitButton);
 
         // Dodanie panelu do ramki
         add(buttonPanel);
@@ -44,9 +46,18 @@ public class ButtonFrame extends JFrame {
         yellowButton.addActionListener(event -> buttonPanel.setBackground(Color.YELLOW));
         blueButton.addActionListener(event -> buttonPanel.setBackground(Color.BLUE));
         redButton.addActionListener(event -> buttonPanel.setBackground(Color.RED));
+        exitButton.addActionListener(event -> System.exit(0));
         // W wyniku tego klasa wenwetrzna ColorAction nie jest potrzebna
+
+        setLocationByPlatform(true);
+
     }
 
+    private void makeButton(String name, Color backgroundColor) {
+        JButton button = new JButton(name);
+        buttonPanel.add(button);
+        button.addActionListener(event -> buttonPanel.setBackground(backgroundColor));
+    }
 
     private class ColorAction implements ActionListener {
         private Color backgroundColor;
