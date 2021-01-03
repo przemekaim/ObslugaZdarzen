@@ -9,7 +9,7 @@ import java.awt.event.WindowListener;
 public class Main {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            JFrame frame = new ActionFrame();
+            JFrame frame = new MouseFrame();
             frame.setTitle("ButtonTest");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
