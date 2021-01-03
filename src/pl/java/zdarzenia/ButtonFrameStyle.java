@@ -2,6 +2,8 @@ package pl.java.zdarzenia;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ButtonFrameStyle extends JFrame {
     private JPanel buttonPanel;
@@ -24,10 +26,11 @@ public class ButtonFrameStyle extends JFrame {
         exitButton.addActionListener(event -> System.exit(0));
         buttonPanel.add(exitButton);
 
+
         setLocationByPlatform(true);
     }
 
-    private void makeButton (String name, String classname) {
+    private void makeButton(String name, String classname) {
         JButton button = new JButton(name);
         buttonPanel.add(button);
 
@@ -44,7 +47,10 @@ public class ButtonFrameStyle extends JFrame {
         });
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
+
+
 }
