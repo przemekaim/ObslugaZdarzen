@@ -53,12 +53,6 @@ public class ButtonFrame extends JFrame {
 
     }
 
-    private void makeButton(String name, Color backgroundColor) {
-        JButton button = new JButton(name);
-        buttonPanel.add(button);
-        button.addActionListener(event -> buttonPanel.setBackground(backgroundColor));
-    }
-
     private class ColorAction implements ActionListener {
         private Color backgroundColor;
 
