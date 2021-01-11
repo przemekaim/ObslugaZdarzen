@@ -4,61 +4,49 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class ButtonFrame extends JFrame {
-    private JPanel buttonPanel;
-    private static final int DEFAULT_WIDTH = 300;
-    private static final int DEFAULT_HEIGHT = 200;
+    private final JPanel buttonPanel;
+    private final static int DEFAULT_WIDTH = 600;
+    private final static int DEFAULT_HEIGHT = 400;
 
-    public ButtonFrame() {
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-        // Tworzenie przyciskow
-        JButton yellowButton = new JButton("Zolty");
-        JButton blueButton = new JButton("Niebieski");
-        JButton redButton = new JButton("Czerwony");
-        JButton exitButton = new JButton("Wyjscie");
-
+    public ButtonFrame() throws HeadlessException {
         buttonPanel = new JPanel();
+        pack();
 
-        // Dodanie przyciskow do panelu
+        JButton yellowButton = new JButton("Yellow", new ImageIcon("yellow-ball.gif"));
+        JButton blueButton = new JButton("Blue", new ImageIcon("blue-ball.gif"));
+        JButton redButton = new JButton("Red", new ImageIcon("red-ball.gif"));
 
         buttonPanel.add(yellowButton);
         buttonPanel.add(blueButton);
         buttonPanel.add(redButton);
-        buttonPanel.add(exitButton);
 
-        // Dodanie panelu do ramki
         add(buttonPanel);
 
-        //Utworzenie akcji przyciskow
-        //ColorAction yellowAction = new ColorAction(Color.YELLOW);
-        //ColorAction blueAction = new ColorAction(Color.BLUE);
-        // ColorAction redAction = new ColorAction(Color.RED);
+        ActionColor yellowAction = new ActionColor(Color.YELLOW);
+        ActionColor blueAction = new ActionColor(Color.BLUE);
+        ActionColor redAction = new ActionColor(Color.RED);
 
-        //Powiazanie akcji z przyciskami
+        yellowButton.addActionListener(yellowAction);
+        blueButton.addActionListener(blueAction);
+        redButton.addActionListener(redAction);
 
-        //yellowButton.addActionListener(yellowAction);
-        //blueButton.addActionListener(blueAction);
-        //redButton.addActionListener(redAction);
-
-        // To samo tylko z lambda
-        yellowButton.addActionListener(event -> buttonPanel.setBackground(Color.YELLOW));
-        blueButton.addActionListener(event -> buttonPanel.setBackground(Color.BLUE));
-        redButton.addActionListener(event -> buttonPanel.setBackground(Color.RED));
-        exitButton.addActionListener(event -> System.exit(0));
-        // W wyniku tego klasa wenwetrzna ColorAction nie jest potrzebna
-
-        setLocationByPlatform(true);
-
+        // LAMBDA
+        //yellowButton.addActionListener(event -> buttonPanel.setBackground(Color.YELLOW));
+        //blueButton.addActionListener(event -> buttonPanel.setBackground(Color.BLUE));
+        //yellowButton.addActionListener(event -> buttonPanel.setBackground(Color.RED));
     }
 
-    private class ColorAction implements ActionListener {
-        private Color backgroundColor;
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
 
-        public ColorAction(Color backgroundColor) {
+    private class ActionColor implements ActionListener {
+        private final Color backgroundColor;
+
+        public ActionColor(Color backgroundColor) {
             this.backgroundColor = backgroundColor;
         }
 
@@ -67,7 +55,4 @@ public class ButtonFrame extends JFrame {
             buttonPanel.setBackground(backgroundColor);
         }
     }
-
-
-
 }

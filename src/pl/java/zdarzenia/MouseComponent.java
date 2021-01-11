@@ -6,16 +6,18 @@ import java.awt.geom.*;
 import java.util.*;
 import javax.swing.*;
 
-public class MouseComponent extends JComponent {
-    private static final int DEFAULT_WIDTH = 300;
-    private static final int DEFAULT_HEIGHT = 200;
 
-    private static final int SIDELENGTH = 10;
-    private ArrayList<Rectangle2D> squares;
-    private Rectangle2D current; // kwadrat zawierajacy kursor
+
+public class MouseComponent extends JComponent {
+    private final static int DEFAULT_WIDTH = 600;
+    private final static int DEFAULT_HEIGHT = 400;
+
+    private final static int SIDELENGTH = 10;
+    private ArrayList<Rectangle2D> rect;
+    private Rectangle2D current;
 
     public MouseComponent() {
-        squares = new ArrayList<>();
+        rect = new ArrayList<>();
         current = null;
 
         addMouseListener(new MouseHandler());
@@ -31,77 +33,89 @@ public class MouseComponent extends JComponent {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        //Rysowanie wszystkich kwadratow
-
-        for (Rectangle2D square : squares) {
-            g2.draw(square);
+        for (Rectangle2D rectangle2D : rect) {
+            g2.draw(rectangle2D);
         }
     }
 
-    // Znajduje pierwszy kwadrat zawierajacy punkt
-    // p - punkt
-    // return - pierwszy kwadrat zawierajacy punkt p
-
-
     public Rectangle2D find(Point2D p) {
-        for (Rectangle2D square : squares) {
-            if (square.contains(p))
-                return square;
+        for (Rectangle2D r : rect) {
+            if (r.contains(p))
+                return r;
         }
         return null;
     }
 
-    public void add (Point2D p) {
+    public void add(Point2D p) {
         double x = p.getX();
         double y = p.getY();
 
-        current = new Rectangle2D.Double(x - SIDELENGTH /2, y - SIDELENGTH /2, SIDELENGTH, SIDELENGTH);
-        squares.add(current);
+        current = new Rectangle2D.Double(x - SIDELENGTH / 2, y - SIDELENGTH / 2, SIDELENGTH, SIDELENGTH);
+        rect.add(current);
         repaint();
     }
 
-    public void remove(Rectangle2D s) {
-        if (s == null) return;
-        if (s == current) current = null;
-        squares.remove(s);
+    public void remove(Rectangle2D r) {
+        if (r == null) return;
+        if (r == current) current = null;
+        rect.remove(r);
         repaint();
+
+        /*
+        if (r == current)
+            rect.remove(r);
+        repaint();
+         */
     }
 
     private class MouseHandler extends MouseAdapter {
 
-        public void mousePressed(MouseEvent event) {
-            // Dodanie nowego kwadratu, jesli kursor nie jest wenwatrz innego kwadratu
-            current = find(event.getPoint());
-            if (current == null) add(event.getPoint());
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            current = find(e.getPoint());
+            if (current != null && e.getClickCount() >= 2)
+                remove(current);
         }
 
-        public void mouseClicked(MouseEvent event) {
-            //Usuniecie kwadratu w wyniku jego dwukrotnego klikniecia
-            current = find(event.getPoint());
-            if(current != null && event.getClickCount() >= 2) remove(current);
+        @Override
+        public void mousePressed(MouseEvent e) {
+            current = find(e.getPoint());
+            if (current == null)
+                add(e.getPoint());
         }
     }
 
     private class MouseMotionHandler implements MouseMotionListener {
 
         @Override
-        public void mouseMoved(MouseEvent event) {
-            // Ustawienie kursora na krzyzyk jesli znaduje sie wewnatrz kwadratu
-
-            if(find(event.getPoint()) == null) setCursor(Cursor.getDefaultCursor());
-            else setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent event) {
+        public void mouseDragged(MouseEvent e) {
             if (current != null) {
-                int x = event.getX();
-                int y = event.getY();
+                double x = e.getX();
+                double y = e.getY();
 
-                //Przeciagniecie aktualnego kwadreatu w celu wysrodkowania go w punkcie (x, y)
-                current.setFrame(x - SIDELENGTH/2 , y-SIDELENGTH /2, SIDELENGTH, SIDELENGTH);
+                current.setFrame(x - SIDELENGTH / 2, y - SIDELENGTH / 2, SIDELENGTH, SIDELENGTH);
                 repaint();
             }
+        }
+
+        // Wlasny kursor
+/*
+Toolkit kit = Toolkit.get...
+Image img = tk.getImage("nazwa");
+Cursor name = tk.createCus...(img, new Point(10,10), "sztick");
+
+ */
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            Toolkit kit = Toolkit.getDefaultToolkit();
+            Image image = kit.getImage("red-ball.gif");
+            Cursor name = kit.createCustomCursor(image, new Point(10,10), "aaa");
+            if (find(e.getPoint()) == null)
+                setCursor(Cursor.getDefaultCursor());
+            else
+                setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+            //setCursor(name);
         }
     }
 }
